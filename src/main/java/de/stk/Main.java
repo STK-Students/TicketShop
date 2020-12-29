@@ -13,25 +13,29 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static Shop shop;
+    private static final Shop shop = new Shop();
+    private static final UIBuilder builder = new UIBuilder();
 
     public static void main(String[] args) {
-        shop = new Shop();
+        builder.buildUI("This is a test text!", new String[]{"One", "Two"}, "a", "abc");
+
         fillShop();
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("------------------------------------");
         System.out.println("Alle Angebote unseres Shops:");
+
         shop.printActivities();
-        String selectedProduct = scanner.next();
+
         System.out.println("------------------------------------");
         System.out.println("Detailansicht:");
+
+        String selectedProduct = scanner.next();
         int index = Integer.parseInt(selectedProduct);
-        Activity currentActivity = shop.getActivity(index);
-        currentActivity.getSummary();
+        Activity selectedActivity = shop.getActivity(index);
+        selectedActivity.getSummary();
 
 
-        System.out.println("------------------------------------");
         System.out.println("------------------------------------");
         System.out.println("Diese Produkte befinden sich in ihrem Warenkorb:");
         shop.getShoppingCart().printSummary();
@@ -60,10 +64,10 @@ public class Main {
 
         //Mehrere Preisklassen anlegen
         ActivityPricing activityPricing = new ActivityPricing(60, 40, 30);
-        return new Theatre(activityDates, activityPricing, 120, "Dr. Gutt");
+        return new Theatre(activityDates, activityPricing, 120, "Dr. Gutt", "Das BWL Fiasko");
     }
 
     private static ShoppingCartItem createShoppingCartItem(Activity activity) {
-        return new ShoppingCartItem(activity,3, ActivityPricing.PricingType.STUDENT, 0, LocalDate.of(2021,1,1), LocalTime.of(20, 0));
+        return new ShoppingCartItem(activity, 3, ActivityPricing.PricingType.STUDENT, 0, LocalDate.of(2021, 1, 1), LocalTime.of(20, 0));
     }
 }

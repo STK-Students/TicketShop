@@ -8,25 +8,49 @@ public class Reading extends Activity {
 
     private String topic;
     private String artist;
-    private boolean tour;
 
-    public Reading(ActivityDates activityDates,String typeName, ActivityPricing pricing) {
+
+    /**
+     * Creates a Reading Activity.
+     * @param activityDates All dates when the Activity will happen are stored as an {@link ActivityDates} list.
+     *                      Each date also holds information about how many tickets are available.
+     * @param pricing       Different pricing classes stored as an {@link ActivityPricing} object.
+     * @param topic         String that represents the topic of the Reading.
+     * @param artist        String that represents the name of the person reading out.
+     */
+    public Reading(ActivityDates activityDates, ActivityPricing pricing, String topic, String artist) {
         super(activityDates, pricing);
+        this.topic = topic;
+        this.artist = artist;
     }
 
-
+    /**
+     * Returns a summary of the Activity.
+     * @return All values of the Activity except pricing and dates.
+     */
     @Override
     public String getSummary() {
-        return null;
+        return "Typ: " + getTypeName() + "\n" +
+                "Thema: " + topic  + "\n" +
+                "Leser: " + artist + "\n";
     }
 
+    /**
+     * Returns the prices and dates of the Activity while also calling getSummary.
+     * @return The complete information of an Activity.
+     */
     @Override
     public String getInformation() {
-        return null;
+        String summary = getSummary();
+        return summary +
+                "Vollpreis: " + getPricing().getFormattedPriceClasses() + "\n" +
+                "Termine: " + getActivityDates();
     }
 
+    /**
+     * Function to set the name of an Activity.
+     * @return The name for this specific Activity.
+     */
     @Override
-    public String setTypeName() {
-        return "Lesung";
-    }
+    public String setTypeName() { return "Lesung"; }
 }

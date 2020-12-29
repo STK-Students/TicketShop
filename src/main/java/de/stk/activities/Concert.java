@@ -9,22 +9,47 @@ public class Concert extends Activity {
     private int duration;
     private String artist;
 
-    public Concert(ActivityDates activityDates, String typeName, ActivityPricing pricing) {
+    /**
+     * Creates a Concert Activity.
+     * @param activityDates All dates when the Activity will happen are stored as an {@link ActivityDates} list.
+     *                      Each date also holds information about how many tickets are available.
+     * @param pricing       Different pricing classes stored as an {@link ActivityPricing} object.
+     * @param duration      Integer representing the duration of the concert.
+     * @param artist        String representing the Name of the artist(s).
+     */
+    public Concert(ActivityDates activityDates, ActivityPricing pricing, int duration, String artist) {
         super(activityDates, pricing);
+        this.duration = duration;
+        this.artist = artist;
     }
 
+    /**
+     * Returns a summary of the Activity.
+     * @return All values of the Activity except pricing and dates.
+     */
     @Override
     public String getSummary() {
-        return null;
+        return "Typ: " + getTypeName() + "\n" +
+                "Dauer: " + duration + "min" + "\n" +
+                "Künstler: " + artist + "\n";
     }
 
+    /**
+     * Returns the prices and dates of the Activity while also calling getSummary.
+     * @return The complete information of an Activity.
+     */
     @Override
     public String getInformation() {
-        return null;
+        String summary = getSummary();
+        return summary +
+                "Preisklassen: " + getPricing().getFormattedPriceClasses() + "\n" +
+                "Termine: " + getActivityDates();
     }
 
+    /**
+     * Function to set the name of an Activity.
+     * @return The name for this specific Activity.
+     */
     @Override
-    public String setTypeName() {
-        return "Konzert";
-    }
+    public String setTypeName() { return "Konzert";}
 }

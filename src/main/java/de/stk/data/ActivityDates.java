@@ -3,6 +3,7 @@ package de.stk.data;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Holds the information about when the Activity will take place.
@@ -28,10 +29,29 @@ public class ActivityDates {
     public ActivityDates() {
     }
 
+    public String getFormattedDates() {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<LocalDate, DailySchedule> entry : activityDates.entrySet()) {
+            String date = entry.getKey().toString();
+
+            HashMap<LocalTime, Integer> dailySchedule = entry.getValue().timeSlots;
+            for (Map.Entry<LocalTime, Integer> daySchedule : dailySchedule.entrySet()) {
+                if (daySchedule.getValue() == 0) {
+
+                }
+
+                //2020-01-01: 10:00
+                result.append(date).append(": ").append(daySchedule.getKey().toString());
+                //2020-01-01: 10:00 Übrige Tickets: 0
+                result.append(" Übrige Tickets: ").append(daySchedule.getValue());
+            }
+        }
+        return "";
+    }
+
     /**
-     *
-     * @param date The day that the timeslot will be added to.
-     * @param time The unique time the activity will start at.
+     * @param date             The day that the timeslot will be added to.
+     * @param time             The unique time the activity will start at.
      * @param availableTickets The amount of available tickets for this timeslot.
      */
     public void createTimeSlot(LocalDate date, LocalTime time, int availableTickets) {
