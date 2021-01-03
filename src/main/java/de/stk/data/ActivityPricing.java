@@ -12,6 +12,7 @@ public class ActivityPricing {
      * @param prices
      */
     private final ArrayList<Float> prices = new ArrayList<>();
+
     private final DecimalFormat formatter = new DecimalFormat("0.00");
 
     public ActivityPricing(float... prices) {
@@ -20,13 +21,12 @@ public class ActivityPricing {
         }
     }
 
-    public String getFormattedPriceClasses() {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < prices.size(); i++) {
-            String formattedPrice = formatter.format(prices.get(i));
-            result.append("["+ i +"] ").append(formattedPrice).append("€ ");
-        }
-        return result.toString();
+    public ArrayList<Float> getPrices() {
+        return prices;
+    }
+
+    public float getPrice(int index) {
+        return prices.get(index);
     }
 
     /**
@@ -37,6 +37,7 @@ public class ActivityPricing {
      * @param priceClass One of the priceClasses of this object.
      * @return The total price that has to be paid.
      */
+    //TODO: Move this somewhere else. This should not be part of a data class.
     public String calcPrice(PricingType type, int amount, int priceClass) {
         float result = type.getFactor() * amount * prices.get(priceClass);
         return formatter.format(result);
@@ -51,11 +52,11 @@ public class ActivityPricing {
         PENSIONER(0.7F),
         HANDICAPPED(0.4F);
 
-        float reduction_factor;
-
-        private float getFactor() {
+        public float getFactor() {
             return reduction_factor;
         }
+
+        public float reduction_factor;
 
         PricingType(float reduction_factor) {
             this.reduction_factor = reduction_factor;

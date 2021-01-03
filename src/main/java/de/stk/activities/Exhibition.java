@@ -1,5 +1,6 @@
 package de.stk.activities;
 
+import de.stk.console.DataFormattingUtils;
 import de.stk.data.Activity;
 import de.stk.data.ActivityDates;
 import de.stk.data.ActivityPricing;
@@ -47,8 +48,13 @@ public class Exhibition extends Activity {
     public String getInformation() {
         String summary = getSummary();
         return summary +
-                "Vollpreis: " + getPricing().getFormattedPriceClasses() + "\n" +
+                "Vollpreis: " + DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices()) + "\n" +
                 "Termine: " + getActivityDates();
+    }
+
+    @Override
+    public String getUniqueName() {
+        return topic;
     }
 
     /**

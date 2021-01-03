@@ -3,7 +3,6 @@ package de.stk.data;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Holds the information about when the Activity will take place.
@@ -26,29 +25,6 @@ public class ActivityDates {
      */
     private final HashMap<LocalDate, DailySchedule> activityDates = new HashMap<>();
 
-    public ActivityDates() {
-    }
-
-    public String getFormattedDates() {
-        StringBuilder result = new StringBuilder();
-        for (Map.Entry<LocalDate, DailySchedule> entry : activityDates.entrySet()) {
-            String date = entry.getKey().toString();
-
-            HashMap<LocalTime, Integer> dailySchedule = entry.getValue().timeSlots;
-            for (Map.Entry<LocalTime, Integer> daySchedule : dailySchedule.entrySet()) {
-                if (daySchedule.getValue() == 0) {
-
-                }
-
-                //2020-01-01: 10:00
-                result.append(date).append(": ").append(daySchedule.getKey().toString());
-                //2020-01-01: 10:00 Übrige Tickets: 0
-                result.append(" Übrige Tickets: ").append(daySchedule.getValue());
-            }
-        }
-        return "";
-    }
-
     /**
      * @param date             The day that the timeslot will be added to.
      * @param time             The unique time the activity will start at.
@@ -67,6 +43,10 @@ public class ActivityDates {
         activityDates.put(date, dailySchedule);
     }
 
+    public HashMap<LocalDate, DailySchedule> getActivityDates() {
+        return activityDates;
+    }
+
     public DailySchedule getTimeSlot(LocalDate data) {
         return activityDates.get(data);
     }
@@ -78,13 +58,24 @@ public class ActivityDates {
         public DailySchedule() {
         }
 
+        public HashMap<LocalTime, Integer> getTimeSlots() {
+            return timeSlots;
+        }
+
         public void addScheduleEntry(LocalTime timeSlot, Integer availableTickets) {
             timeSlots.put(timeSlot, availableTickets);
         }
 
+        public int getAvailableCards(LocalTime time) {
+            return timeSlots.get(time);
+        }
+
         public void buyTickets(LocalTime timeSlot, int boughtTickets) {
             timeSlots.put(timeSlot, timeSlots.get(timeSlot) - boughtTickets);
+        }
 
+        public void refundTickets(LocalTime timeSlot, int refundedTickets) {
+            timeSlots.put(timeSlot, timeSlots.get(timeSlot) + refundedTickets);
         }
     }
 }

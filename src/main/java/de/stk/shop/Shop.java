@@ -3,6 +3,7 @@ package de.stk.shop;
 import de.stk.data.Activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This object holds all activities that can be bought.
@@ -14,21 +15,13 @@ public class Shop {
      * Contains all the instances of {@link Activity}ies subclasses. These are all
      * different activities with their own values.
      */
+    //TODO: Check if this can be a HashMap<UniqueName,Activity>. This would optimize the ConsoleDialogPrinter
     private ArrayList<Activity> allActivities = new ArrayList<>();
 
     /**
      * Contains all items which were selected by the user.
      */
     private ShoppingCart shoppingCart = new ShoppingCart();
-
-    /**
-     * Prints the summaries of all available activities.
-     */
-    public void printActivities() {
-        for (Activity activity : allActivities) {
-            System.out.println(activity.getSummary());
-        }
-    }
 
     /**
      * Gets the specified activity from the Arraylist.
@@ -39,12 +32,16 @@ public class Shop {
         return allActivities.get(index);
     }
 
+    public ArrayList<Activity> getAllActivities() {
+        return allActivities;
+    }
+
     /**
      * Adds an specified activity.
      * @param activity The activity with their own values.
      */
-    public void addActivity(Activity activity) {
-        this.allActivities.add(activity);
+    public void addActivity(Activity... activity) {
+       this.allActivities.addAll(Arrays.asList(activity));
     }
 
     /**

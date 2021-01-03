@@ -1,5 +1,6 @@
 package de.stk.activities;
 
+import de.stk.console.DataFormattingUtils;
 import de.stk.data.Activity;
 import de.stk.data.ActivityDates;
 import de.stk.data.ActivityPricing;
@@ -8,6 +9,7 @@ public class Concert extends Activity {
 
     private int duration;
     private String artist;
+    private String name;
 
     /**
      * Creates a Concert Activity.
@@ -17,10 +19,11 @@ public class Concert extends Activity {
      * @param duration      Integer representing the duration of the concert.
      * @param artist        String representing the Name of the artist(s).
      */
-    public Concert(ActivityDates activityDates, ActivityPricing pricing, int duration, String artist) {
+    public Concert(ActivityDates activityDates, ActivityPricing pricing, int duration, String artist, String name) {
         super(activityDates, pricing);
         this.duration = duration;
         this.artist = artist;
+        this.name = name;
     }
 
     /**
@@ -42,8 +45,13 @@ public class Concert extends Activity {
     public String getInformation() {
         String summary = getSummary();
         return summary +
-                "Preisklassen: " + getPricing().getFormattedPriceClasses() + "\n" +
+                "Preisklassen: " + DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices()) + "\n" +
                 "Termine: " + getActivityDates();
+    }
+
+    @Override
+    public String getUniqueName() {
+        return name;
     }
 
     /**

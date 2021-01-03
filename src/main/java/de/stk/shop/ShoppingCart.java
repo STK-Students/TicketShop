@@ -24,6 +24,7 @@ public class ShoppingCart {
      * Function to add a specific Activity to the user's cart.
      * @param cartItem The user's selected item.
      */
+    //TODO: Max 3 Items!
     public void addItem(ShoppingCartItem cartItem) {
         this.shoppingCartItems.add(cartItem);
     }

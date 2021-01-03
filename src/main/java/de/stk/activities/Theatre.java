@@ -1,8 +1,11 @@
 package de.stk.activities;
 
+import de.stk.console.DataFormattingUtils;
 import de.stk.data.Activity;
 import de.stk.data.ActivityDates;
 import de.stk.data.ActivityPricing;
+
+import java.util.ArrayList;
 
 public class Theatre extends Activity {
 
@@ -12,6 +15,7 @@ public class Theatre extends Activity {
 
     /**
      * Creates a Theatre Activity.
+     *
      * @param activityDates All dates when the Activity will happen are stored as an {@link ActivityDates} list.
      *                      Each date also holds information about how many tickets are available.
      * @param pricing       Different pricing classes stored as an {@link ActivityPricing} object.
@@ -28,34 +32,49 @@ public class Theatre extends Activity {
 
     /**
      * Returns a summary of the Activity.
-     * @return All values of the Activity except pricing and dates.
+     *
+     * @return All values of the Activity except pricing, dates and the unique name (play).
      */
     @Override
     public String getSummary() {
         return "Typ: " + getTypeName() + "\n" +
-                "Dauer: " + duration + "min" + "\n" +
-                "Autor: " + author + "\n" +
-                "Theaterstück: " + play + "\n";
+                "Dauer: " + duration + "min" +
+                "  Autor: " + author + "" +
+                "  Stück: ";
     }
 
     /**
-     * Returns the prices and dates of the Activity while also calling getSummary.
+     * Returns the prices of the Activity while also calling getSummary.
+     * Dates are left out as the only call of this method has to build an option list with those.
      * @return The complete information of an Activity.
      */
     @Override
     public String getInformation() {
-        String summary = getSummary();
-        return summary +
-                "Vollpreis: " + getPricing().getFormattedPriceClasses() + "\n" +
-                "Termine: " + getActivityDates();
+        ArrayList<String> formattedPricing = DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices());
+       StringBuilder result = new StringBuilder();
+       for (String a : formattedPricing) {
+           result.append(a).append(" ");
+       }
 
+        return getSummary() + getUniqueName() + "\n" +
+                "Preisklassen: " + result + "\n" +
+                "Termine: ";
+
+    }
+
+    @Override
+    public String getUniqueName() {
+        return play;
     }
 
     /**
      * Function to set the name of an Activity.
+     *
      * @return The name for this specific Activity.
      */
     @Override
-    public String setTypeName() { return "Theatervorstellung"; }
+    public String setTypeName() {
+        return "Theatervorstellung";
+    }
 }
 
