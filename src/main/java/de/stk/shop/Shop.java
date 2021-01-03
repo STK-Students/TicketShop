@@ -16,12 +16,12 @@ public class Shop {
      * different activities with their own values.
      */
     //TODO: Check if this can be a HashMap<UniqueName,Activity>. This would optimize the ConsoleDialogPrinter
-    private ArrayList<Activity> allActivities = new ArrayList<>();
+    private final ArrayList<Activity> allActivities = new ArrayList<>();
 
     /**
      * Contains all items which were selected by the user.
      */
-    private ShoppingCart shoppingCart = new ShoppingCart();
+    private final ShoppingCart shoppingCart = new ShoppingCart();
 
     /**
      * Gets the specified activity from the Arraylist.

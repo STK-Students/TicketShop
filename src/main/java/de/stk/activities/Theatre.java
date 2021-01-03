@@ -46,18 +46,19 @@ public class Theatre extends Activity {
     /**
      * Returns the prices of the Activity while also calling getSummary.
      * Dates are left out as the only call of this method has to build an option list with those.
+     *
      * @return The complete information of an Activity.
      */
     @Override
     public String getInformation() {
         ArrayList<String> formattedPricing = DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices());
-       StringBuilder result = new StringBuilder();
-       for (String a : formattedPricing) {
-           result.append(a).append(" ");
-       }
+        StringBuilder pricingList = new StringBuilder();
+        for (String price : formattedPricing) {
+            pricingList.append(price).append(" ");
+        }
 
         return getSummary() + getUniqueName() + "\n" +
-                "Preisklassen: " + result + "\n" +
+                "Preisklassen: " + pricingList + "\n" +
                 "Termine: ";
 
     }

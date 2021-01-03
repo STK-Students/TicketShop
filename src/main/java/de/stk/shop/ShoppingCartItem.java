@@ -19,20 +19,38 @@ public class ShoppingCartItem {
     /*
     Unique Shopping Cart values. These are all chosen from the list of possible options.
      */
-    private final int boughtTickets;
-    private final PricingType pricingType;
-    private final int priceClass;
-    private final LocalDate day;
-    private final LocalTime time;
+    private int boughtTickets;
+    private PricingType pricingType;
+    private int priceClass;
+    private LocalDate day;
+    private LocalTime time;
 
-    public ShoppingCartItem(Activity activity, int boughtTickets, PricingType pricingType, int priceClass, LocalDate day, LocalTime time) {
+    public ShoppingCartItem(Activity activity) {
         this.activity = activity;
-        this.pricingType = pricingType;
-        this.boughtTickets = boughtTickets;
-        this.priceClass = priceClass;
-        this.day = day;
-        this.time = time;
+    }
 
+    public void setBoughtTickets(int boughtTickets) {
+        this.boughtTickets = boughtTickets;
+    }
+
+    public void setPricingType(PricingType pricingType) {
+        this.pricingType = pricingType;
+    }
+
+    public void setPriceClass(int priceClass) {
+        this.priceClass = priceClass;
+    }
+
+    public void setDay(LocalDate day) {
+        this.day = day;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public Activity getActivity() {
+        return activity;
     }
 
     public String getSummary() {
