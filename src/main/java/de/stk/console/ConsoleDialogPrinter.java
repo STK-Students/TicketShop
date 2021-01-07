@@ -1,6 +1,11 @@
 package de.stk.console;
 
+import de.stk.Main;
 import de.stk.data.Activity;
+import de.stk.data.ActivityDates;
+import de.stk.data.ActivityPricing;
+import de.stk.data.ActivityPricing.PricingType;
+import de.stk.shop.Shop;
 import de.stk.shop.ShoppingCart;
 import de.stk.shop.ShoppingCartItem;
 import org.apache.commons.lang3.tuple.Pair;
@@ -9,15 +14,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
 import static de.stk.Main.getShop;
 import static de.stk.console.ColorUtil.colorize;
 import static de.stk.console.ColorUtil.strikeThrough;
-import static de.stk.console.ConsoleDialogPrinter.WindowState.BUY_PRICE_CLASS;
-import static de.stk.console.ConsoleDialogPrinter.WindowState.SHOP;
-import static de.stk.console.DataFormattingUtils.getFormattedDates;
+import static de.stk.console.ConsoleDialogPrinter.WindowState.*;
+import static de.stk.console.DataFormattingUtils.*;
 
 /**
  * Holds the entire state of a users shopping process.
@@ -25,10 +30,6 @@ import static de.stk.console.DataFormattingUtils.getFormattedDates;
  */
 public class ConsoleDialogPrinter {
 
-    /**
-     * This Shopping cart obtains a ShoppingCartItem when Shopping Process is completed.
-     */
-    private ShoppingCart shoppingCart;
     /**
      * The item that is currently constructed in a shopping process. Can be null.
      */
@@ -88,8 +89,8 @@ public class ConsoleDialogPrinter {
 
     private void printBuyPriceClassWindow() {
         ArrayList<Float> pricing = currentItem.getActivity().getPricing().getPrices();
+        ArrayList<String> formattedPricing = getFormattedPricing(pricing);
 
-        ArrayList<String> formattedPricing = DataFormattingUtils.getFormattedPricing(pricing);
 
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < formattedPricing.size(); i++) {
@@ -103,8 +104,14 @@ public class ConsoleDialogPrinter {
 
         int input;
         while (true) {
-            input = consoleScanner.nextInt();
-            if (formattedPricing.get(input) == null) {
+            try {
+                String rawInput = consoleScanner.nextLine();
+                input = Integer.parseInt(rawInput);
+            } catch (NumberFormatException exception) {
+                System.out.println(colorize("Ungültige Antwort! Es gibt keine solche Preisklasse.", ColorUtil.Color.RED));
+                continue;
+            }
+            if (formattedPricing.size() <= input || input < 0) {
                 System.out.println(colorize("Ungültige Antwort! Es gibt keine solche Preisklasse.", ColorUtil.Color.RED));
                 continue;
             }
@@ -112,15 +119,82 @@ public class ConsoleDialogPrinter {
         }
 
         currentItem.setPriceClass(input);
+
+        initWindow(BUY_AMOUNT);
     }
 
     private void printBuyAmountWindow() {
+        Activity activity = currentItem.getActivity();
+        ActivityDates.DailySchedule dailySchedule = activity.getActivityDates().getTimeSlot(currentItem.getDay());
+
+        int availableTickets = dailySchedule.getAvailableTickets(currentItem.getTime());
+        System.out.println("Es sind noch " + availableTickets + " Tickets verfügbar.");
+        printInputBorder();
+        System.out.println(BUY_AMOUNT.getInstructionText());
+        printInputBorder();
+
+        int input;
+        while (true) {
+            try {
+                String rawInput = consoleScanner.nextLine();
+                input = Integer.parseInt(rawInput);
+                if (input < 1 || input > availableTickets) {
+                    System.out.println(colorize("Ungültige Antwort! Sie können nicht mehr Tickets als überhaupt verfügbar kaufen.", ColorUtil.Color.RED));
+                    continue;
+                }
+                break;
+            } catch (InputMismatchException exception) {
+                System.out.println(colorize("Ungültige Antwort! Bitte geben Sie eine Zahl ein.", ColorUtil.Color.RED));
+            }
+        }
+
+        currentItem.setBoughtTickets(input);
+
+        initWindow(BUY_DISCOUNT);
     }
 
     private void printBuyDiscountWindow() {
+        ActivityPricing activityPricing = currentItem.getActivity().getPricing();
+        ArrayList<String> prices = calcAllPrices(activityPricing, currentItem.getTickets(), currentItem.getPriceClass());
+
+
+        for (int i = 0; i < prices.size(); i++) {
+            System.out.println(prices.get(i) + " [" + i + "]");
+        }
+
+        printInputBorder();
+        System.out.println(BUY_DISCOUNT.getInstructionText());
+        printInputBorder();
+
+        int input;
+        while (true) {
+            try {
+                String rawInput = consoleScanner.nextLine();
+                input = Integer.parseInt(rawInput);
+                if (input < 0 || input > (prices.size() - 1)) {
+                    System.out.println(colorize("Ungültige Antwort! Sie können nicht mehr Tickets als überhaupt verfügbar kaufen.", ColorUtil.Color.RED));
+                    continue;
+                }
+                break;
+            } catch (InputMismatchException exception) {
+                System.out.println(colorize("Ungültige Antwort! Bitte geben Sie eine Zahl ein.", ColorUtil.Color.RED));
+            }
+        }
+        for (int i = 0; i <= PricingType.values().length; i++) {
+            if (input == i) {
+                PricingType[] allPricingArray = PricingType.values();
+                currentItem.setPricingType(allPricingArray[i]);
+                break;
+            }
+        }
+        initWindow(SHOPPING_CART);
     }
 
     private void printShoppingCartWindow() {
+        ShoppingCart shoppingCart = Main.getShop().getShoppingCart();
+        shoppingCart.addItem(currentItem);
+
+        shoppingCart.printSummary();
     }
 
     private void printBillWindow() {
@@ -177,31 +251,25 @@ public class ConsoleDialogPrinter {
         printInputBorder();
 
         //Get input
-        String rawInput;
+        String rawInput = "";
         int intInput;
         while (true) {
-            rawInput = consoleScanner.nextLine();
-
             try {
+                rawInput = consoleScanner.nextLine();
                 intInput = Integer.parseInt(rawInput);
             } catch (NumberFormatException exception) {
                 if (rawInput.equals("Übersicht")) {
-                    intInput = -1;
-                    break;
+                    return null;
                 } else {
                     System.out.println(colorize("Ungültige Antwort! Es gibt dieses Datum nicht.", ColorUtil.Color.RED));
                     continue;
                 }
             }
-
-            if ((intInput < dateIndex.size()) && dateIndex.get(intInput) != null) {
+            if ((intInput >= 0 && intInput < dateIndex.size()) && dateIndex.get(intInput) != null) {
                 break;
             } else {
                 System.out.println(colorize("Ungültige Antwort! Es gibt dieses Datum nicht.", ColorUtil.Color.RED));
             }
-        }
-        if (intInput == -1) {
-            return null;
         }
         return dateIndex.get(intInput);
     }

@@ -66,7 +66,7 @@ public class ActivityDates {
             timeSlots.put(timeSlot, availableTickets);
         }
 
-        public int getAvailableCards(LocalTime time) {
+        public int getAvailableTickets(LocalTime time) {
             return timeSlots.get(time);
         }
 

@@ -1,6 +1,7 @@
 package de.stk.console;
 
 import de.stk.data.ActivityDates;
+import de.stk.data.ActivityPricing;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -11,9 +12,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static de.stk.data.ActivityPricing.PricingType;
+
 public class DataFormattingUtils {
 
     private static final DecimalFormat formatter = new DecimalFormat("0.00");
+
 
     //TODO: Formatted Pricing does not include any options.
     public static ArrayList<String> getFormattedPricing(ArrayList<Float> prices) {
@@ -63,5 +67,25 @@ public class DataFormattingUtils {
             }
         }
         return resultArray;
+    }
+
+    /**
+     * Calculates the total price that has to be payed.
+     *
+     * @param activityPricing An instance of {@link ActivityPricing}.
+     * @param amount          The amount of tickets that are bought.
+     * @param priceClass      One of the priceClasses of this object.
+     * @return The total price that has to be paid.
+     */
+    public static ArrayList<String> calcAllPrices(ActivityPricing activityPricing, int amount, int priceClass) {
+        ArrayList<String> result = new ArrayList<>();
+
+        for (PricingType type : PricingType.values()) {
+            float price = type.getFactor() * amount * activityPricing.getPrice(priceClass);
+           String formattedPrice = formatter.format(price);
+
+            result.add("Gesamter Preis " + type.getName() + formattedPrice + "€");
+        }
+        return result;
     }
 }
