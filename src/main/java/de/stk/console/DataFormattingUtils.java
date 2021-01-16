@@ -31,13 +31,14 @@ public class DataFormattingUtils {
     }
 
     /**
-     * Formats the data of an {@link ActivityDates} object into human readable strings and returns each date alongside
-     * it's {@link LocalDate} and {@link LocalTime} objects.
+     * Formats the data of an {@link ActivityDates} object into a HashMap that consists of a
+     * human readable string (Date, Time, Amount of tickets left) and a pair of {@link LocalDate}
+     * and {@link LocalTime} objects. Dates that have no tickets left will be crossed out.
      *
      * @param dates The {@link ActivityDates} object that's formatted data will be returned.
-     * @return A HashMap<String, Pair<LocalDate, LocalTime>> each string is one date and has a pair of
-     * LocalDate and LocalTime objects assigned to it. The string will be strikedthrough and the pair will be null
-     * if all tickets for a specific date are sold out.
+     * @return A HashMap<String, Pair<LocalDate, LocalTime>> each string holds date, time and the amount of available
+     * tickets. Each string has a pair of LocalDate and LocalTime objects assigned to it.
+     * The string will be crossed out and the pair will be null if all tickets for a specific date are sold out.
      */
     public static HashMap<String, Pair<LocalDate, LocalTime>> getFormattedDates(ActivityDates dates) {
         HashMap<LocalDate, ActivityDates.DailySchedule> activityDates = dates.getActivityDates();
@@ -70,7 +71,7 @@ public class DataFormattingUtils {
     }
 
     /**
-     * Calculates the total price that has to be payed.
+     * Calculates the price respecting amount and price class for all {@link PricingType}s.
      *
      * @param activityPricing An instance of {@link ActivityPricing}.
      * @param amount          The amount of tickets that are bought.
@@ -82,7 +83,7 @@ public class DataFormattingUtils {
 
         for (PricingType type : PricingType.values()) {
             float price = type.getFactor() * amount * activityPricing.getPrice(priceClass);
-           String formattedPrice = formatter.format(price);
+            String formattedPrice = formatter.format(price);
 
             result.add("Gesamter Preis " + type.getName() + formattedPrice + "€");
         }

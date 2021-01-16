@@ -17,6 +17,7 @@ public class ShoppingCartItem {
 
     private final Activity activity;
 
+    private final DecimalFormat formatter = new DecimalFormat("0.00");
     /*
     Unique Shopping Cart values. These are all chosen from the list of possible options.
      */
@@ -74,17 +75,33 @@ public class ShoppingCartItem {
         return activity;
     }
 
+    public float getUnreducedPrice() {
+        return activity.getPricing().getPrice(priceClass) * boughtTickets;
+    }
+
+    public float getReducedPrice() {
+        return pricingType.getFactor() * boughtTickets * activity.getPricing().getPrice(priceClass);
+    }
+
     public String getSummary() {
-        DecimalFormat formatter = new DecimalFormat("0.00");
-        float totalPrice = pricingType.getFactor() * boughtTickets * activity.getPricing().getPrice(priceClass);
-        String formattedPrice = formatter.format(totalPrice);
+        String formattedUnreducedPrice = formatter.format(getUnreducedPrice());
+        String formattedReducedPrice = formatter.format(getReducedPrice());
+
+        String priceText;
+        if (pricingType == PricingType.DEFAULT) {
+            priceText = "Preis: " + formattedUnreducedPrice;
+        } else {
+            priceText = "Der Preis beträgt anstatt " + formattedUnreducedPrice +
+                    "€ bei gewährtem " + pricingType.getDescription() + " nur noch " + formattedReducedPrice + "€";
+        }
 
         String activitySummary = activity.getSummary();
 
         String itemSummary = boughtTickets + "\n" +
-                "Datum: " + day.toString()  + " "+
+                "Datum: " + day.toString() + " " +
                 "Uhrzeit: " + time.toString() + "\n" +
-                "Gesamter Preis: " + formattedPrice + "€";
+                priceText;
+
 
         return activitySummary + itemSummary;
     }

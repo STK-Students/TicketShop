@@ -31,9 +31,9 @@ public class ActivityPricing {
      */
     public enum PricingType {
         DEFAULT(1F, "Kein Rabatt: ", "Normalpreis"),
-        STUDENT(0.6F, "Studenten: ", "Studentenrabatt"),
-        PENSIONER(0.7F, "Senioren: ", "Seniorenrabatt"),
-        HANDICAPPED(0.4F, "Behinderte: ", "Behindertenrabatt");
+        STUDENT(0.6F, "Studenten: ", "Studentenrabatt von 40%"),
+        PENSIONER(0.7F, "Senioren: ", "Seniorenrabatt von 30%"),
+        HANDICAPPED(0.4F, "Behinderte: ", "Behindertenrabatt von 60%");
 
         public float getFactor() {
             return reduction_factor;

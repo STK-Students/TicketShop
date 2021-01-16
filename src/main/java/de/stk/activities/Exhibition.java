@@ -20,6 +20,7 @@ public class Exhibition extends Activity {
      * @param exhibitor     String representing the Name of the exhibitor.
      * @param tour          Boolean value representing if a tour is possible or not.
      */
+    //TODO: Tour Price needs to be it's own attribute. Reuse ActivityPricing?
     public Exhibition(ActivityDates activityDates, ActivityPricing pricing, String topic, String exhibitor, boolean tour) {
         super(activityDates, pricing);
         this.topic = topic;
