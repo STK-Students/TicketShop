@@ -1,11 +1,10 @@
 package de.stk.shop;
 
-import de.stk.console.ColorUtil;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static de.stk.console.ColorUtil.*;
+import static de.stk.console.ConsoleUtils.printEmptyLine;
 
 /**
  * Object that holds all items the user plans to buy.
@@ -14,7 +13,7 @@ public class ShoppingCart {
     /**
      * Contains all the instances of the activities the user placed inside their shopping cart.
      */
-    private ArrayList<ShoppingCartItem> shoppingCartItems = new ArrayList<ShoppingCartItem>();
+    private final ArrayList<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
 
     /**
      * Function to print all instances of the Activities inside the cart.
@@ -25,16 +24,19 @@ public class ShoppingCart {
         float totalPriceFloat = 0;
         for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
             System.out.println(shoppingCartItem.getSummary());
-            totalPriceFloat += shoppingCartItem.getReducedPrice();
+            if (totalPriceFloat != 0) {
+                printEmptyLine();
+            }
+            totalPriceFloat += shoppingCartItem.getPrice();
         }
 
         String totalPrice = formatter.format(totalPriceFloat);
         double totalPriceTaxFloat = totalPriceFloat * 1.19;
         String totalPriceTax = formatter.format(totalPriceTaxFloat);
 
-        System.out.println();
-        System.out.println(colorize("Gesamter Preis ohne Mehrwertsteuer: " + totalPrice + "€", Color.BLUE));
-        System.out.println(colorize("Gesamter Preis mit Mehrwertsteuer: " + totalPriceTax + "€", Color.GREEN));
+        printEmptyLine();
+        System.out.println(colorize("Gesamter Preis ohne Mehrwertsteuer: " + totalPrice + "€", Color.GREEN));
+        System.out.println(colorize("Gesamter Preis mit Mehrwertsteuer:  " + totalPriceTax + "€", Color.BLUE));
     }
 
     /**

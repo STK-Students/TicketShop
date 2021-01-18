@@ -75,24 +75,17 @@ public class ShoppingCartItem {
         return activity;
     }
 
-    public float getUnreducedPrice() {
-        return activity.getPricing().getPrice(priceClass) * boughtTickets;
-    }
-
-    public float getReducedPrice() {
+    public float getPrice() {
         return pricingType.getFactor() * boughtTickets * activity.getPricing().getPrice(priceClass);
     }
 
     public String getSummary() {
-        String formattedUnreducedPrice = formatter.format(getUnreducedPrice());
-        String formattedReducedPrice = formatter.format(getReducedPrice());
+        String price = formatter.format(getPrice());
 
         String priceText;
-        if (pricingType == PricingType.DEFAULT) {
-            priceText = "Preis: " + formattedUnreducedPrice;
-        } else {
-            priceText = "Der Preis beträgt anstatt " + formattedUnreducedPrice +
-                    "€ bei gewährtem " + pricingType.getDescription() + " nur noch " + formattedReducedPrice + "€";
+        priceText = "Preis: " + price;
+        if (pricingType != PricingType.DEFAULT) {
+            priceText += "€ bei gewährtem " + pricingType.getDescription();
         }
 
         String activitySummary = activity.getSummary();

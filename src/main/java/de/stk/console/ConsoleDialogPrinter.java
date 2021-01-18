@@ -21,6 +21,7 @@ import static de.stk.Main.getShop;
 import static de.stk.console.ColorUtil.Color;
 import static de.stk.console.ColorUtil.colorize;
 import static de.stk.console.ConsoleDialogPrinter.WindowState.*;
+import static de.stk.console.ConsoleUtils.printEmptyLine;
 import static de.stk.console.DataFormattingUtils.*;
 
 /**
@@ -62,7 +63,7 @@ public class ConsoleDialogPrinter {
     }
 
     private void printShopWindow() {
-        System.out.println();
+        printEmptyLine();
         Activity[] allActivities = getShop().getAllActivities().toArray(new Activity[0]);
         Activity currentActivity = runShopWindowDialog(allActivities);
         currentItem = new ShoppingCartItem(currentActivity);
@@ -193,6 +194,8 @@ public class ConsoleDialogPrinter {
 
         shoppingCart.printSummary();
 
+        printInstruction(SHOPPING_CART);
+
         String input;
         while (true) {
             input = consoleScanner.nextLine();
@@ -226,12 +229,10 @@ public class ConsoleDialogPrinter {
 
         for (Activity activity : activities) {
             System.out.println(activity.getSummary() + "[" + activity.getUniqueName() + "]");
-            System.out.println();
+            printEmptyLine();
         }
 
-
         printInstruction(WindowState.SHOP);
-
 
         String input;
         while (true) {
@@ -291,7 +292,7 @@ public class ConsoleDialogPrinter {
     private void printWindowBorder() {
         int i = 0;
         while (i < 15) {
-            System.out.println();
+            printEmptyLine();
             i++;
         }
     }
