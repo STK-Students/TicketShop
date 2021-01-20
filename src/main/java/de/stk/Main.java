@@ -5,22 +5,20 @@ import de.stk.console.ConsoleDialogPrinter;
 import de.stk.data.ActivityDates;
 import de.stk.data.ActivityPricing;
 import de.stk.shop.Shop;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Main {
 
+    @Getter
     private static Shop shop;
 
     public static void main(String[] args) {
         shop = new Shop();
         fillShop();
         new ConsoleDialogPrinter();
-    }
-
-    public static Shop getShop() {
-        return shop;
     }
 
     //ONLY DEMO METHODS THAT FILL THE SHOP AFTER THIS POINT

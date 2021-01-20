@@ -34,6 +34,7 @@ public class Theatre extends Activity {
      * Returns a summary of the Activity.
      *
      * @return All values of the Activity except pricing, dates and the unique name (play).
+     * These will be added in a detailed view or during the {@link de.stk.console.ConsoleDialogPrinter}.
      */
     @Override
     public String getSummary() {

@@ -1,5 +1,7 @@
 package de.stk.console;
 
+import lombok.Getter;
+
 public class ColorUtil {
 
     private static final char STRIKETHROUGH_CHAR = '\u0336';
@@ -92,12 +94,8 @@ public class ColorUtil {
         INTENSE_BACKGROUND_CYAN("\033[0;106m"),
         INTENSE_BACKGROUND_WHITE("\033[0;107m");
 
-
-        public String getColorCode() {
-            return colorCode;
-        }
-
-        private String colorCode;
+        @Getter
+        private final String colorCode;
 
         Color(String colorCode) {
             this.colorCode = colorCode;

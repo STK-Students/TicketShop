@@ -3,7 +3,8 @@ package de.stk.shop;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import static de.stk.console.ColorUtil.*;
+import static de.stk.console.ColorUtil.Color;
+import static de.stk.console.ColorUtil.colorize;
 import static de.stk.console.ConsoleUtils.printEmptyLine;
 
 /**
@@ -19,15 +20,16 @@ public class ShoppingCart {
      * Function to print all instances of the Activities inside the cart.
      */
     public void printSummary() {
+        printEmptyLine();
+
         DecimalFormat formatter = new DecimalFormat("0.00");
 
         float totalPriceFloat = 0;
         for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
-            System.out.println(shoppingCartItem.getSummary());
-            if (totalPriceFloat != 0) {
-                printEmptyLine();
-            }
             totalPriceFloat += shoppingCartItem.getPrice();
+
+            System.out.println(shoppingCartItem.getSummary());
+            printEmptyLine();
         }
 
         String totalPrice = formatter.format(totalPriceFloat);
@@ -35,31 +37,38 @@ public class ShoppingCart {
         String totalPriceTax = formatter.format(totalPriceTaxFloat);
 
         printEmptyLine();
-        System.out.println(colorize("Gesamter Preis ohne Mehrwertsteuer: " + totalPrice + "€", Color.GREEN));
-        System.out.println(colorize("Gesamter Preis mit Mehrwertsteuer:  " + totalPriceTax + "€", Color.BLUE));
+        System.out.println(colorize("Gesamter Preis exkl. 19% Mehrwertsteuer: " + totalPrice + "€", Color.GREEN));
+        System.out.println(colorize("Gesamter Preis inkl. 19% Mehrwertsteuer: " + totalPriceTax + "€", Color.BLUE));
     }
 
+
     /**
-     * Function to add a specific Activity to the user's cart.
+     * Adds a specific Activity to the user's cart.
+     * Validates
      *
      * @param cartItem The user's selected item.
+     * @return boolean whether or not the limit of 3 different activities is reached.
      */
-    //TODO: Max 3 Items!
-    //TODO: Remove tickets from data as they are "reserved"
-    public void addItem(ShoppingCartItem cartItem) {
-        this.shoppingCartItems.add(cartItem);
-    }
 
-    /**
-     * Function to buy all available Activities at once.
-     */
-    public void buyAllItems() {
-        for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
-            shoppingCartItem.buy();
+    public boolean addItem(ShoppingCartItem cartItem) {
+        if (shoppingCartItems.size() == 3) {
+            return false;
         }
+
+        cartItem.buy();
+        shoppingCartItems.add(cartItem);
+
+        return true;
     }
 
     public void clear() {
+        for (ShoppingCartItem cartItem : shoppingCartItems) {
+            cartItem.refund();
+        }
         shoppingCartItems.clear();
+    }
+
+    public boolean holdsItems() {
+        return shoppingCartItems.size() >= 1;
     }
 }

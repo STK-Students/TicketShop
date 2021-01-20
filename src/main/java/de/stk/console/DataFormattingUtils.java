@@ -18,7 +18,6 @@ public class DataFormattingUtils {
 
     private static final DecimalFormat formatter = new DecimalFormat("0.00");
 
-
     //TODO: Formatted Pricing does not include any options.
     public static ArrayList<String> getFormattedPricing(ArrayList<Float> prices) {
         ArrayList<String> resultArray = new ArrayList<>();
@@ -82,7 +81,7 @@ public class DataFormattingUtils {
         ArrayList<String> result = new ArrayList<>();
 
         for (PricingType type : PricingType.values()) {
-            float price = type.getFactor() * amount * activityPricing.getPrice(priceClass);
+            float price = type.getReductionFactor() * amount * activityPricing.getPrice(priceClass);
             String formattedPrice = formatter.format(price);
 
             result.add("Gesamter Preis " + type.getName() + formattedPrice + "€");

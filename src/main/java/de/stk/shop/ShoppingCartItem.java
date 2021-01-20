@@ -48,7 +48,7 @@ public class ShoppingCartItem {
     }
 
     public float getPrice() {
-        return pricingType.getFactor() * boughtTickets * activity.getPricing().getPrice(priceClass);
+        return pricingType.getReductionFactor() * boughtTickets * activity.getPricing().getPrice(priceClass);
     }
 
     /**

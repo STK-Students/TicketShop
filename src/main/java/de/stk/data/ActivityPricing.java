@@ -1,5 +1,7 @@
 package de.stk.data;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
 public class ActivityPricing {
@@ -10,16 +12,13 @@ public class ActivityPricing {
      *
      * @param prices
      */
+    @Getter
     private final ArrayList<Float> prices = new ArrayList<>();
 
     public ActivityPricing(float... prices) {
         for (float price : prices) {
             this.prices.add(price);
         }
-    }
-
-    public ArrayList<Float> getPrices() {
-        return prices;
     }
 
     public float getPrice(int index) {
@@ -35,24 +34,16 @@ public class ActivityPricing {
         PENSIONER(0.7F, "Senioren: ", "Seniorenrabatt von 30%."),
         HANDICAPPED(0.4F, "Behinderte: ", "Behindertenrabatt von 60%.");
 
-        public float getFactor() {
-            return reduction_factor;
-        }
 
-        public String getName() {
-            return name;
-        }
+        @Getter
+        private final float reductionFactor;
+        @Getter
+        private final String name;
+        @Getter
+        private final String description;
 
-        public String getDescription() {
-            return description;
-        }
-
-        private float reduction_factor;
-        private String name;
-        private String description;
-
-        PricingType(float reduction_factor, String name, String description) {
-            this.reduction_factor = reduction_factor;
+        PricingType(float reductionFactor, String name, String description) {
+            this.reductionFactor = reductionFactor;
             this.name = name;
             this.description = description;
         }

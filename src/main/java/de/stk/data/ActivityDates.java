@@ -1,5 +1,7 @@
 package de.stk.data;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ public class ActivityDates {
      * Each time slot then has an Integer that represents the amount of Tickets
      * that are left.
      */
+    @Getter
     private final HashMap<LocalDate, DailySchedule> activityDates = new HashMap<>();
 
     /**
@@ -43,24 +46,14 @@ public class ActivityDates {
         activityDates.put(date, dailySchedule);
     }
 
-    public HashMap<LocalDate, DailySchedule> getActivityDates() {
-        return activityDates;
-    }
-
     public DailySchedule getTimeSlot(LocalDate data) {
         return activityDates.get(data);
     }
 
-    public class DailySchedule {
+    public static class DailySchedule {
 
+        @Getter
         HashMap<LocalTime, Integer> timeSlots = new HashMap<>();
-
-        public DailySchedule() {
-        }
-
-        public HashMap<LocalTime, Integer> getTimeSlots() {
-            return timeSlots;
-        }
 
         public void addScheduleEntry(LocalTime timeSlot, Integer availableTickets) {
             timeSlots.put(timeSlot, availableTickets);

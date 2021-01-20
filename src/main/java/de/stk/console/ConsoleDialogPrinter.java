@@ -11,11 +11,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 import static de.stk.Main.getShop;
 import static de.stk.console.ColorUtil.Color;
@@ -35,7 +32,7 @@ public class ConsoleDialogPrinter {
      */
     private ShoppingCartItem currentItem;
 
-    private final Scanner consoleScanner = new Scanner(System.in);
+    final Scanner consoleScanner = new Scanner(System.in);
 
     public ConsoleDialogPrinter() {
         initWindow(SHOP);
@@ -66,9 +63,12 @@ public class ConsoleDialogPrinter {
         printEmptyLine();
         Activity[] allActivities = getShop().getAllActivities().toArray(new Activity[0]);
         Activity currentActivity = runShopWindowDialog(allActivities);
-        currentItem = new ShoppingCartItem(currentActivity);
-
-        initWindow(WindowState.DETAILED_VIEW);
+        if (currentActivity == null) {
+            initWindow(SHOPPING_CART);
+        } else {
+            currentItem = new ShoppingCartItem(currentActivity);
+            initWindow(DETAILED_VIEW);
+        }
     }
 
     private void printDetailedViewWindow() {
@@ -104,7 +104,7 @@ public class ConsoleDialogPrinter {
         int input;
         while (true) {
             try {
-                String rawInput = consoleScanner.nextLine();
+                String rawInput = getUserInput();
                 input = Integer.parseInt(rawInput);
             } catch (NumberFormatException exception) {
                 System.out.println(colorize("Ungültige Antwort! Es gibt keine solche Preisklasse.", Color.RED));
@@ -134,14 +134,14 @@ public class ConsoleDialogPrinter {
         int input;
         while (true) {
             try {
-                String rawInput = consoleScanner.nextLine();
+                String rawInput = getUserInput();
                 input = Integer.parseInt(rawInput);
                 if (input < 1 || input > availableTickets) {
                     System.out.println(colorize("Ungültige Antwort! Sie können nicht mehr Tickets als überhaupt verfügbar kaufen.", Color.RED));
                     continue;
                 }
                 break;
-            } catch (InputMismatchException exception) {
+            } catch (NumberFormatException | InputMismatchException exception) {
                 System.out.println(colorize("Ungültige Antwort! Bitte geben Sie eine Zahl ein.", Color.RED));
             }
         }
@@ -153,28 +153,25 @@ public class ConsoleDialogPrinter {
 
     private void printBuyDiscountWindow() {
         ActivityPricing activityPricing = currentItem.getActivity().getPricing();
-        ArrayList<String> prices = calcAllPrices(activityPricing, currentItem.getTickets(), currentItem.getPriceClass());
-
+        ArrayList<String> prices = calcAllPrices(activityPricing, currentItem.getBoughtTickets(), currentItem.getPriceClass());
 
         for (int i = 0; i < prices.size(); i++) {
             System.out.println(prices.get(i) + " [" + i + "]");
         }
 
-
         printInstruction(BUY_DISCOUNT);
-
 
         int input;
         while (true) {
             try {
-                String rawInput = consoleScanner.nextLine();
+                String rawInput = getUserInput();
                 input = Integer.parseInt(rawInput);
                 if (input < 0 || input > (prices.size() - 1)) {
                     System.out.println(colorize("Ungültige Antwort! Sie können nicht mehr Tickets als überhaupt verfügbar kaufen.", Color.RED));
                     continue;
                 }
                 break;
-            } catch (InputMismatchException exception) {
+            } catch (NumberFormatException | InputMismatchException exception) {
                 System.out.println(colorize("Ungültige Antwort! Bitte geben Sie eine Zahl ein.", Color.RED));
             }
         }
@@ -190,7 +187,14 @@ public class ConsoleDialogPrinter {
 
     private void printShoppingCartWindow() {
         ShoppingCart shoppingCart = Main.getShop().getShoppingCart();
-        shoppingCart.addItem(currentItem);
+        if (currentItem != null && currentItem.isComplete()) {
+            boolean success = shoppingCart.addItem(currentItem);
+            currentItem = null;
+            if (!success) {
+                System.out.println(colorize("Sie dürfen maximal drei verschiedene Rechnungsposten auf einmal im Warenkorb haben.", Color.BOLD_RED));
+                System.out.println(colorize("Es wurde kein weiterer Posten dazugelegt.", Color.BOLD_RED));
+            }
+        }
 
         shoppingCart.printSummary();
 
@@ -198,16 +202,17 @@ public class ConsoleDialogPrinter {
 
         String input;
         while (true) {
-            input = consoleScanner.nextLine();
-            if (input.equals("Übersicht") || input.equals("Kaufen") || input.equals("Abbruch")) {
+            input = getUserInput();
+            if (input.equalsIgnoreCase("Übersicht") || input.equalsIgnoreCase("Kaufen") ||
+                    input.equalsIgnoreCase("Abbruch")) {
                 break;
             }
             System.out.println(colorize("Keine gültige Eingabe.", Color.RED));
         }
 
-        if (input.equals("Übersicht")) {
+        if (input.equalsIgnoreCase("Übersicht")) {
             initWindow(SHOP);
-        } else if (input.equals("Kaufen")) {
+        } else if (input.equalsIgnoreCase("Kaufen")) {
             initWindow(BILL);
         } else {
             //Abbruch
@@ -218,13 +223,16 @@ public class ConsoleDialogPrinter {
 
 
     private void printBillWindow() {
+        ShoppingCart shoppingCart = Main.getShop().getShoppingCart();
+        shoppingCart.printSummary();
     }
 
     private Activity runShopWindowDialog(Activity... activities) {
         //Assign a unique name to each Activity so we can ask the user to choose
         HashMap<String, Activity> activityIndex = new HashMap<>();
-        for (Activity value : activities) {
-            activityIndex.put(value.getUniqueName(), value);
+        for (Activity activity : activities) {
+            String identifier = activity.getUniqueName().toLowerCase(Locale.ROOT);
+            activityIndex.put(identifier, activity);
         }
 
         for (Activity activity : activities) {
@@ -232,11 +240,16 @@ public class ConsoleDialogPrinter {
             printEmptyLine();
         }
 
-        printInstruction(WindowState.SHOP);
+        printInstruction(SHOP);
 
         String input;
         while (true) {
-            input = consoleScanner.nextLine();
+            input = getUserInput();
+            if (input.equalsIgnoreCase("Warenkorb")) {
+                if (Main.getShop().getShoppingCart().holdsItems()) {
+                    return null;
+                }
+            }
             if (activityIndex.get(input) == null) {
                 System.out.println(colorize("Ungültige Antwort! Es gibt keine solche Veranstaltung.", Color.RED));
                 continue;
@@ -263,17 +276,17 @@ public class ConsoleDialogPrinter {
         }
 
 
-        printInstruction(WindowState.DETAILED_VIEW);
+        printInstruction(DETAILED_VIEW);
 
         //Get input
         String rawInput = "";
         int intInput;
         while (true) {
             try {
-                rawInput = consoleScanner.nextLine();
+                rawInput = getUserInput();
                 intInput = Integer.parseInt(rawInput);
             } catch (NumberFormatException exception) {
-                if (rawInput.equals("Übersicht")) {
+                if (rawInput.equalsIgnoreCase("Übersicht")) {
                     return null;
                 } else {
                     System.out.println(colorize("Ungültige Antwort! Bitte geben Sie eine der Zahlen aus den eckigen Klammern ein.", Color.RED));
@@ -302,15 +315,20 @@ public class ConsoleDialogPrinter {
         System.out.println(inputBorder + "\n" + state.getInstructionText() + "\n" + inputBorder);
     }
 
+    private String getUserInput() {
+        String input = consoleScanner.nextLine();
+        return input.toLowerCase(Locale.ROOT);
+    }
+
     enum WindowState {
 
-        SHOP("Willkommen im Ticket Shop der Stadt Köln!\nDies ist unsere Auswahl an Veranstaltungen:", "Geben Sie bitte den Titel der Veranstaltung ein für die Sie sich interessieren:"),
+        SHOP(colorize("Willkommen im Ticket Shop der Stadt Köln!\nDies ist unsere Auswahl an Veranstaltungen:", Color.BOLD_CYAN), "Geben Sie bitte den Titel der Veranstaltung ein für die Sie sich interessieren:"),
         DETAILED_VIEW("Detailansicht des ausgewählten Objekts:\n", "Geben Sie bitte die Nummer der Veranstaltung ein für die Sie sich interessieren.\n[Übersicht] bringt Sie zurück in den Shop:"),
         BUY_PRICE_CLASS("Eine höhere Preisklasse entspricht für gewöhnlich einem besserem Sitzplatz.\nAlle Preise ohne Mehrwertsteuer!\n\nVerfügbare Preisklassen:", "Geben Sie bitte die gewünschte Preisklasse an. "),
         BUY_AMOUNT("Verfügbare Tickets:", "Geben Sie bitte die gewünschte Menge an Karten an."),
         BUY_DISCOUNT("Verfügbare Rabatte:\n", "Geben Sie bitte den für Rabatt an für den Sie qualifiziert sind."),
         SHOPPING_CART("Diese Produkte befinden sich in ihrem Warenkorb:\n", "[Kaufen] zum Kaufen aller Inhalte des Warenkorbs.\n[Übersicht] Wenn Sie noch weitere Gegenstände in den Warenkorb legen wollen.\n[Abbruch] zum leeren des Warenkorbs."),
-        BILL("Vielen Dank für ihren Einkauf! \nIhre Rechnung:", "Wählen Sie [Übersicht] um sich alle Angebote anzeigen zu lassen.");
+        BILL(colorize("Vielen Dank für ihren Einkauf! \nIhre Rechnung:", Color.BOLD_GREEN), "Wählen Sie [Übersicht] um sich alle Angebote anzeigen zu lassen.");
 
         /**
          * A short informative text about the current Windows that is displayed to the user.
