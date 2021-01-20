@@ -14,7 +14,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static de.stk.Main.getShop;
+import static de.stk.Main.*;
 import static de.stk.console.ColorUtil.Color;
 import static de.stk.console.ColorUtil.colorize;
 import static de.stk.console.ConsoleDialogPrinter.WindowState.*;
