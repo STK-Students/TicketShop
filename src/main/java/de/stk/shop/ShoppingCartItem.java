@@ -2,6 +2,8 @@ package de.stk.shop;
 
 import de.stk.data.Activity;
 import de.stk.data.ActivityPricing.PricingType;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -15,68 +17,46 @@ import java.time.LocalTime;
  */
 public class ShoppingCartItem {
 
+    @Getter
     private final Activity activity;
 
     private final DecimalFormat formatter = new DecimalFormat("0.00");
     /*
     Unique Shopping Cart values. These are all chosen from the list of possible options.
      */
-    private int boughtTickets;
-    private PricingType pricingType;
-    private int priceClass;
+    @Getter @Setter
     private LocalDate day;
+    @Getter @Setter
     private LocalTime time;
+    @Setter @Getter
+    private int boughtTickets;
+    @Setter @Getter
+    private int priceClass;
+    @Setter
+    private PricingType pricingType;
 
     public ShoppingCartItem(Activity activity) {
         this.activity = activity;
     }
 
-    public void setBoughtTickets(int boughtTickets) {
-        this.boughtTickets = boughtTickets;
+    public void buy() {
+        activity.getActivityDates().getTimeSlot(day).buyTickets(time, boughtTickets);
     }
 
-    public void setPricingType(PricingType pricingType) {
-        this.pricingType = pricingType;
-    }
-
-    public void setPriceClass(int priceClass) {
-        this.priceClass = priceClass;
-    }
-
-    public int getTickets() {
-        return boughtTickets;
-    }
-
-    public PricingType getPricingType() {
-        return pricingType;
-    }
-
-    public int getPriceClass() {
-        return priceClass;
-    }
-
-    public LocalDate getDay() {
-        return day;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setDay(LocalDate day) {
-        this.day = day;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
-
-    public Activity getActivity() {
-        return activity;
+    public void refund() {
+        activity.getActivityDates().getTimeSlot(day).refundTickets(time, boughtTickets);
     }
 
     public float getPrice() {
         return pricingType.getFactor() * boughtTickets * activity.getPricing().getPrice(priceClass);
+    }
+
+    /**
+     * Ensures that this Item is complete and ready for billing.
+     * @return a boolean; true if complete, false if incomplete
+     */
+    public boolean isComplete() {
+        return day != null && time != null && boughtTickets != 0 && pricingType != null;
     }
 
     public String getSummary() {
@@ -88,19 +68,16 @@ public class ShoppingCartItem {
             priceText += "€ bei gewährtem " + pricingType.getDescription();
         }
 
-        String activitySummary = activity.getSummary();
+        String activitySummary = activity.getSummary() + activity.getUniqueName();
 
-        String itemSummary = boughtTickets + "\n" +
+        String itemSummary = "\n" +
+                "Anzahl Karten: " + boughtTickets + " " +
                 "Datum: " + day.toString() + " " +
                 "Uhrzeit: " + time.toString() + "\n" +
                 priceText;
 
 
         return activitySummary + itemSummary;
-    }
-
-    public void buy() {
-        activity.getActivityDates().getTimeSlot(day).buyTickets(time, 5);
     }
 
 }
