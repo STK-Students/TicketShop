@@ -7,8 +7,8 @@ import de.stk.data.ActivityPricing;
 
 public class Reading extends Activity {
 
-    private String topic;
-    private String artist;
+    private final String topic;
+    private final String artist;
 
 
     /**

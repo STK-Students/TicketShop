@@ -7,9 +7,9 @@ import de.stk.data.ActivityPricing;
 
 public class Exhibition extends Activity {
 
-    private String topic;
-    private String exhibitor;
-    private boolean tour;
+    private final String topic;
+    private final String exhibitor;
+    private final boolean tour;
 
     /**
      * Creates an Exhibition Activity.

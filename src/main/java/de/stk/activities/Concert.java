@@ -7,12 +7,13 @@ import de.stk.data.ActivityPricing;
 
 public class Concert extends Activity {
 
-    private int duration;
-    private String artist;
-    private String name;
+    private final int duration;
+    private final String artist;
+    private final String name;
 
     /**
      * Creates a Concert Activity.
+     *
      * @param activityDates All dates when the Activity will happen are stored as an {@link ActivityDates} list.
      *                      Each date also holds information about how many tickets are available.
      * @param pricing       Different pricing classes stored as an {@link ActivityPricing} object.
@@ -28,6 +29,7 @@ public class Concert extends Activity {
 
     /**
      * Returns a summary of the Activity.
+     *
      * @return All values of the Activity except pricing and dates.
      */
     @Override
@@ -39,6 +41,7 @@ public class Concert extends Activity {
 
     /**
      * Returns the prices and dates of the Activity while also calling getSummary.
+     *
      * @return The complete information of an Activity.
      */
     @Override
@@ -56,8 +59,11 @@ public class Concert extends Activity {
 
     /**
      * Function to set the name of an Activity.
+     *
      * @return The name for this specific Activity.
      */
     @Override
-    public String setTypeName() { return "Konzert";}
+    public String setTypeName() {
+        return "Konzert";
+    }
 }
