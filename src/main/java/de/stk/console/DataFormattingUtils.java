@@ -68,7 +68,7 @@ public class DataFormattingUtils {
     }
 
     /**
-     * Calculates the price respecting amount and price class for all {@link PricingType}s.
+     * Calculates the net price respecting amount and price class for all {@link PricingType}s.
      *
      * @param activityPricing An instance of {@link ActivityPricing}.
      * @param amount          The amount of tickets that are bought.

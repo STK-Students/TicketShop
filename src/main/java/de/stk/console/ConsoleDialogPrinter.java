@@ -236,7 +236,7 @@ public class ConsoleDialogPrinter {
         }
 
         for (Activity activity : activities) {
-            System.out.println(activity.getSummary() + "[" + activity.getUniqueName() + "]");
+            System.out.println(activity.getSummary() + colorize("[" + activity.getUniqueName() + "]", Color.PURPLE,Color.UNDERLINE));
             printEmptyLine();
         }
 

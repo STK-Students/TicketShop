@@ -5,6 +5,10 @@ import de.stk.data.Activity;
 import de.stk.data.ActivityDates;
 import de.stk.data.ActivityPricing;
 
+import java.util.ArrayList;
+
+import static de.stk.console.ColorUtil.*;
+
 public class Exhibition extends Activity {
 
     private final String topic;
@@ -13,6 +17,7 @@ public class Exhibition extends Activity {
 
     /**
      * Creates an Exhibition Activity.
+     *
      * @param activityDates All dates when the Activity will happen are stored as an {@link ActivityDates} list.
      *                      Each date also holds information about how many tickets are available.
      * @param pricing       Different pricing classes stored as an {@link ActivityPricing} object.
@@ -30,27 +35,34 @@ public class Exhibition extends Activity {
 
     /**
      * Returns a summary of the Activity.
+     *
      * @return All values of the Activity except pricing and dates.
      */
     @Override
     public String getSummary() {
-        String tourPossible = tour ? "Ja." : "Nein.";
+        String tourPossible = tour ? colorize("Ja", Color.LIGHT_GREEN) : colorize("Nein", Color.RED);
 
-        return "Topic: " + topic + "\n" +
-                "Artist: " + exhibitor + "\n" +
-                "Tour möglich: " + tourPossible;
+        return "Typ: " + getTypeName() + "\n" +
+                "Artist: " + exhibitor + "  Tour möglich: " + tourPossible + "  Thema: ";
     }
 
     /**
      * Returns the prices and dates of the Activity while also calling getSummary.
+     *
      * @return The complete information of an Activity.
      */
     @Override
     public String getInformation() {
+        ArrayList<String> formattedPricing = DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices());
+        StringBuilder pricingList = new StringBuilder();
+        for (String price : formattedPricing) {
+            pricingList.append(price).append(" ");
+        }
+
         String summary = getSummary();
-        return summary + "\n" +
-                "Vollpreis: " + DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices()) + "\n" +
-                "Termine: " + getActivityDates();
+        return summary + getUniqueName() + "\n" +
+                "Vollpreis: " + pricingList + "\n" +
+                "Termine: ";
     }
 
     @Override
@@ -60,6 +72,7 @@ public class Exhibition extends Activity {
 
     /**
      * Function to set the name of an Activity.
+     *
      * @return The name for this specific Activity.
      */
     @Override

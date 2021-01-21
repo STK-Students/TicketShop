@@ -5,6 +5,8 @@ import de.stk.data.Activity;
 import de.stk.data.ActivityDates;
 import de.stk.data.ActivityPricing;
 
+import java.util.ArrayList;
+
 public class Reading extends Activity {
 
     private final String topic;
@@ -41,9 +43,14 @@ public class Reading extends Activity {
      */
     @Override
     public String getInformation() {
-        return getSummary() + getUniqueName() +
-                "Vollpreis: " + DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices()) + "\n" +
-                "Termine: " + getActivityDates();
+        ArrayList<String> formattedPricing = DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices());
+        StringBuilder pricingList = new StringBuilder();
+        for (String price : formattedPricing) {
+            pricingList.append(price).append(" ");
+        }
+        return getSummary() + getUniqueName() + "\n" +
+                "Vollpreis: " + pricingList + "\n" +
+                "Termine: ";
     }
 
     @Override

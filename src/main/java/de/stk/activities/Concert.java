@@ -5,6 +5,8 @@ import de.stk.data.Activity;
 import de.stk.data.ActivityDates;
 import de.stk.data.ActivityPricing;
 
+import java.util.ArrayList;
+
 public class Concert extends Activity {
 
     private final int duration;
@@ -35,8 +37,7 @@ public class Concert extends Activity {
     @Override
     public String getSummary() {
         return "Typ: " + getTypeName() + "\n" +
-                "Dauer: " + duration + "min" + "\n" +
-                "Künstler: " + artist + "\n";
+                "Dauer: " + duration + "min" + "  Künstler: " + artist + "  Thema: ";
     }
 
     /**
@@ -46,10 +47,15 @@ public class Concert extends Activity {
      */
     @Override
     public String getInformation() {
+        ArrayList<String> formattedPricing = DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices());
+        StringBuilder pricingList = new StringBuilder();
+        for (String price : formattedPricing) {
+            pricingList.append(price).append(" ");
+        }
         String summary = getSummary();
-        return summary +
-                "Preisklassen: " + DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices()) + "\n" +
-                "Termine: " + getActivityDates();
+        return summary + getUniqueName() + "\n" +
+                "Preisklassen: " + pricingList + "\n" +
+                "Termine: ";
     }
 
     @Override
