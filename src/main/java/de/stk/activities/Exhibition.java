@@ -48,7 +48,7 @@ public class Exhibition extends Activity {
     @Override
     public String getInformation() {
         String summary = getSummary();
-        return summary +
+        return summary + "\n" +
                 "Vollpreis: " + DataFormattingUtils.getFormattedPricing(super.getPricing().getPrices()) + "\n" +
                 "Termine: " + getActivityDates();
     }

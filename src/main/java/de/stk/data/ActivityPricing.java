@@ -4,6 +4,10 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 
+/**
+ * Holds all pricing information of an activity.
+ * This includes price classes and discounts.
+ */
 public class ActivityPricing {
 
     /**

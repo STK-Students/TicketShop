@@ -1,5 +1,7 @@
 package de.stk.shop;
 
+import de.stk.console.ConsoleUtils;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -37,8 +39,8 @@ public class ShoppingCart {
         String totalPriceTax = formatter.format(totalPriceTaxFloat);
 
         printEmptyLine();
-        System.out.println(colorize("Gesamter Preis exkl. 19% Mehrwertsteuer: " + totalPrice + "€", Color.GREEN));
-        System.out.println(colorize("Gesamter Preis inkl. 19% Mehrwertsteuer: " + totalPriceTax + "€", Color.BLUE));
+        System.out.println(colorize("Gesamter Preis exkl. 19% Mehrwertsteuer: " + totalPrice + ConsoleUtils.EURO, Color.GREEN));
+        System.out.println(colorize("Gesamter Preis inkl. 19% Mehrwertsteuer: " + totalPriceTax + ConsoleUtils.EURO, Color.BLUE));
     }
 
 
@@ -68,6 +70,10 @@ public class ShoppingCart {
         shoppingCartItems.clear();
     }
 
+    /**
+     * Check whether the shoppingCart holds item.
+     * @return true if the ShoppingCart holds items.
+     */
     public boolean holdsItems() {
         return shoppingCartItems.size() >= 1;
     }

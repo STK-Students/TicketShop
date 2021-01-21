@@ -191,8 +191,8 @@ public class ConsoleDialogPrinter {
             boolean success = shoppingCart.addItem(currentItem);
             currentItem = null;
             if (!success) {
-                System.out.println(colorize("Sie dürfen maximal drei verschiedene Rechnungsposten auf einmal im Warenkorb haben.", Color.BOLD_RED));
-                System.out.println(colorize("Es wurde kein weiterer Posten dazugelegt.", Color.BOLD_RED));
+                System.out.println(colorize("Sie dürfen maximal drei verschiedene Rechnungsposten auf einmal im Warenkorb haben.", Color.RED));
+                System.out.println(colorize("Es wurde kein weiterer Posten dazugelegt.", Color.RED));
             }
         }
 
@@ -275,6 +275,9 @@ public class ConsoleDialogPrinter {
             }
         }
 
+        if (formattedDates.size() == 0 ) {
+            System.out.println(colorize("Ausverkauft!", Color.BOLD, Color.RED));
+        }
 
         printInstruction(DETAILED_VIEW);
 
@@ -322,13 +325,13 @@ public class ConsoleDialogPrinter {
 
     enum WindowState {
 
-        SHOP(colorize("Willkommen im Ticket Shop der Stadt Köln!\nDies ist unsere Auswahl an Veranstaltungen:", Color.BOLD_CYAN), "Geben Sie bitte den Titel der Veranstaltung ein für die Sie sich interessieren:"),
+        SHOP(colorize("Willkommen im Ticket Shop der Stadt Köln!\nDies ist unsere Auswahl an Veranstaltungen:", Color.CYAN), "Geben Sie bitte den Titel der Veranstaltung ein für die Sie sich interessieren:"),
         DETAILED_VIEW("Detailansicht des ausgewählten Objekts:\n", "Geben Sie bitte die Nummer der Veranstaltung ein für die Sie sich interessieren.\n[Übersicht] bringt Sie zurück in den Shop:"),
         BUY_PRICE_CLASS("Eine höhere Preisklasse entspricht für gewöhnlich einem besserem Sitzplatz.\nAlle Preise ohne Mehrwertsteuer!\n\nVerfügbare Preisklassen:", "Geben Sie bitte die gewünschte Preisklasse an. "),
         BUY_AMOUNT("Verfügbare Tickets:", "Geben Sie bitte die gewünschte Menge an Karten an."),
         BUY_DISCOUNT("Verfügbare Rabatte:\n", "Geben Sie bitte den für Rabatt an für den Sie qualifiziert sind."),
         SHOPPING_CART("Diese Produkte befinden sich in ihrem Warenkorb:\n", "[Kaufen] zum Kaufen aller Inhalte des Warenkorbs.\n[Übersicht] Wenn Sie noch weitere Gegenstände in den Warenkorb legen wollen.\n[Abbruch] zum leeren des Warenkorbs."),
-        BILL(colorize("Vielen Dank für ihren Einkauf! \nIhre Rechnung:", Color.BOLD_GREEN), "Wählen Sie [Übersicht] um sich alle Angebote anzeigen zu lassen.");
+        BILL(colorize("Vielen Dank für ihren Einkauf! \nIhre Rechnung:", Color.GREEN), "Wählen Sie [Übersicht] um sich alle Angebote anzeigen zu lassen.");
 
         /**
          * A short informative text about the current Windows that is displayed to the user.

@@ -1,10 +1,12 @@
 package de.stk.shop;
 
+import de.stk.console.ConsoleUtils;
 import de.stk.data.Activity;
 import de.stk.data.ActivityPricing.PricingType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Console;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -65,7 +67,7 @@ public class ShoppingCartItem {
         String priceText;
         priceText = "Preis: " + price;
         if (pricingType != PricingType.DEFAULT) {
-            priceText += "€ bei gewährtem " + pricingType.getDescription();
+            priceText += ConsoleUtils.EURO + " bei gewährtem " + pricingType.getDescription();
         }
 
         String activitySummary = activity.getSummary() + activity.getUniqueName();

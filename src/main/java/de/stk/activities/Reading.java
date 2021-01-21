@@ -32,8 +32,7 @@ public class Reading extends Activity {
     @Override
     public String getSummary() {
         return "Typ: " + getTypeName() + "\n" +
-                "Thema: " + topic  + "\n" +
-                "Leser: " + artist + "\n";
+                "Autor: " + artist + "  Thema: ";
     }
 
     /**

@@ -50,6 +50,10 @@ public class ActivityDates {
         return activityDates.get(data);
     }
 
+    /**
+     * Helper object that represents all dates of an activity on one day.
+     * The amount of leftover tickets is stored per timeslot.
+     */
     public static class DailySchedule {
 
         @Getter

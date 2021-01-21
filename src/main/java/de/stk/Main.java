@@ -1,5 +1,8 @@
 package de.stk;
 
+import de.stk.activities.Concert;
+import de.stk.activities.Exhibition;
+import de.stk.activities.Reading;
 import de.stk.activities.Theatre;
 import de.stk.console.ConsoleDialogPrinter;
 import de.stk.data.ActivityDates;
@@ -24,24 +27,26 @@ public class Main {
     //ONLY DEMO METHODS THAT FILL THE SHOP AFTER THIS POINT
 
     private static void fillShop() {
-        Theatre guttsSpektakel = createTheaterExample("Dr. Gutt", "Das BWL Fiasko");
-        Theatre trittmannsHorrorShow = createTheaterExample("Dr. Trittmann", "Aufnahme? Vergessen...");
+        Theatre guttsSpektakel = new Theatre(createActivityDates(), createActivityPricing(), 120,"Dr. Gutt", "Das BWL Fiasko");
+        Theatre trittmannsHorrorShow = new Theatre(createActivityDates(), createActivityPricing(), 120, "Dr. Trittmann", "Aufnahme? Vergessen...");
+        Reading slumioksWeihnachtsgedicht = new Reading(createActivityDates(),createActivityPricing(), "Das Christkind beim Finanzamt", "Dipl-Kffr. Slumiok");
+        Concert demnitzAbriss = new Concert(createActivityDates(),createActivityPricing(),666,"Dr. DEM","");
+        Exhibition patrickRZitate = new Exhibition(createActivityDates(), createActivityPricing(), "Die gesammelten Zitate des Patrick R.", "Thorre & Beyhad", false);
 
-        shop.addActivity(guttsSpektakel, trittmannsHorrorShow);
+        shop.addActivity(guttsSpektakel, trittmannsHorrorShow, slumioksWeihnachtsgedicht, demnitzAbriss, patrickRZitate);
     }
 
-    private static Theatre createTheaterExample(String author, String name) {
+
+    private static ActivityPricing createActivityPricing() {
+        return new ActivityPricing(60, 40, 30);
+    }
+
+    private static ActivityDates createActivityDates() {
         ActivityDates activityDates = new ActivityDates();
 
         activityDates.createTimeSlot(LocalDate.of(2021, 1, 1), LocalTime.of(16, 0), 60);
         activityDates.createTimeSlot(LocalDate.of(2021, 2, 2), LocalTime.of(16, 0), 80);
         activityDates.createTimeSlot(LocalDate.of(2021, 1, 1), LocalTime.of(20, 0), 0);
-
-        ActivityPricing activityPricing = new ActivityPricing(60, 40, 30);
-        return new Theatre(activityDates, activityPricing, 120, author, name);
+        return activityDates;
     }
-
-//    private static ShoppingCartItem createShoppingCartItem(Activity activity) {
-//        return new ShoppingCartItem(activity, 3, ActivityPricing.PricingType.STUDENT, 0, LocalDate.of(2021, 1, 1), LocalTime.of(20, 0));
-//    }
 }

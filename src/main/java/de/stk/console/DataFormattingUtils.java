@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static de.stk.console.ColorUtil.colorize;
 import static de.stk.data.ActivityPricing.PricingType;
 
 public class DataFormattingUtils {
@@ -24,7 +25,7 @@ public class DataFormattingUtils {
 
         for (Float price : prices) {
             String formattedPrice = formatter.format(price);
-            resultArray.add(formattedPrice + "€");
+            resultArray.add(formattedPrice + ConsoleUtils.EURO);
         }
         return resultArray;
     }
@@ -56,10 +57,7 @@ public class DataFormattingUtils {
                 result.append(date).append(": ").append(time);
                 result.append(" Übrige Tickets: ").append(leftOverTickets);
 
-                if (leftOverTickets == 0) {
-                    String strikedThroughDate = ColorUtil.strikeThrough(result.toString());
-                    resultArray.put(strikedThroughDate, null);
-                } else {
+                if (leftOverTickets != 0) {
                     LocalDate currentDate = dateEntry.getKey();
                     LocalTime currentTime = daySchedule.getKey();
                     resultArray.put(result.toString(), new ImmutablePair<>(currentDate, currentTime));
@@ -84,7 +82,7 @@ public class DataFormattingUtils {
             float price = type.getReductionFactor() * amount * activityPricing.getPrice(priceClass);
             String formattedPrice = formatter.format(price);
 
-            result.add("Gesamter Preis " + type.getName() + formattedPrice + "€");
+            result.add("Gesamter Preis " + type.getName() + formattedPrice + ConsoleUtils.EURO);
         }
         return result;
     }
