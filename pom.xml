@@ -97,7 +97,10 @@
                 <artifactId>lombok-maven-plugin</artifactId>
                 <version>1.18.16.0</version>
                 <configuration>
-                    <encoding>UTF-8</encoding>
+                        <sourceDirectory>src/main/java</sourceDirectory>
+                        <outputDirectory>${project.build.directory}/delombok</outputDirectory>
+                        <addOutputDirectory>false</addOutputDirectory>
+                        <encoding>UTF-8</encoding>
                 </configuration>
                 <executions>
                     <execution>
