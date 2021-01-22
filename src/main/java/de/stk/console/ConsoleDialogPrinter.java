@@ -1,6 +1,6 @@
 package de.stk.console;
 
-import de.stk.Main;
+import de.stk.TicketShop;
 import de.stk.data.Activity;
 import de.stk.data.ActivityDates;
 import de.stk.data.ActivityPricing;
@@ -14,7 +14,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static de.stk.Main.*;
+import static de.stk.TicketShop.*;
 import static de.stk.console.ColorUtil.Color;
 import static de.stk.console.ColorUtil.colorize;
 import static de.stk.console.ConsoleDialogPrinter.WindowState.*;
@@ -186,7 +186,7 @@ public class ConsoleDialogPrinter {
     }
 
     private void printShoppingCartWindow() {
-        ShoppingCart shoppingCart = Main.getShop().getShoppingCart();
+        ShoppingCart shoppingCart = TicketShop.getShop().getShoppingCart();
         if (currentItem != null && currentItem.isComplete()) {
             boolean success = shoppingCart.addItem(currentItem);
             currentItem = null;
@@ -223,7 +223,7 @@ public class ConsoleDialogPrinter {
 
 
     private void printBillWindow() {
-        ShoppingCart shoppingCart = Main.getShop().getShoppingCart();
+        ShoppingCart shoppingCart = TicketShop.getShop().getShoppingCart();
         shoppingCart.printSummary();
     }
 
@@ -246,7 +246,7 @@ public class ConsoleDialogPrinter {
         while (true) {
             input = getUserInput();
             if (input.equalsIgnoreCase("Warenkorb")) {
-                if (Main.getShop().getShoppingCart().holdsItems()) {
+                if (TicketShop.getShop().getShoppingCart().holdsItems()) {
                     return null;
                 }
             }
