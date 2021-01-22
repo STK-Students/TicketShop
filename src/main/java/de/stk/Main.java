@@ -10,6 +10,7 @@ import de.stk.data.ActivityPricing;
 import de.stk.shop.Shop;
 import lombok.Getter;
 
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,6 +18,7 @@ public class Main {
 
     @Getter
     private static Shop shop;
+
     public static void main(String[] args) {
         shop = new Shop();
         fillShop();
@@ -26,10 +28,10 @@ public class Main {
     //ONLY DEMO METHODS THAT FILL THE SHOP AFTER THIS POINT
 
     private static void fillShop() {
-        Theatre guttsSpektakel = new Theatre(createActivityDatesA(), new ActivityPricing(60, 40, 30), 120,"Dr. Gutt", "Das BWL Fiasko");
+        Theatre guttsSpektakel = new Theatre(createActivityDatesA(), new ActivityPricing(60, 40, 30), 120, "Dr. Gutt", "Das BWL Fiasko");
         Theatre trittmannsHorrorShow = new Theatre(createActivityDatesA(), new ActivityPricing(70, 40), 120, "Dr. Trittmann", "Aufnahme? Vergessen...");
-        Reading slumioksWeihnachtsgedicht = new Reading(createActivityDatesA(),new ActivityPricing(12), "Das Christkind beim Finanzamt", "Dipl-Kffr. Slumiok");
-        Concert demnitzAbriss = new Concert(createActivityDatesA(),new ActivityPricing(119.99F,99.99F,79.99F,49.99F),666,"Dr. DEM","Dr. Dems Eskalation");
+        Reading slumioksWeihnachtsgedicht = new Reading(createActivityDatesA(), new ActivityPricing(12), "Das Christkind beim Finanzamt", "Dipl-Kffr. Slumiok");
+        Concert demnitzAbriss = new Concert(createActivityDatesA(), new ActivityPricing(119.99F, 99.99F, 79.99F, 49.99F), 666, "Dr. DEM", "Dr. Dems Eskalation");
         Exhibition patrickRZitate = new Exhibition(createSoldOutActivityDates(), new ActivityPricing(666), "Die gesammelten Zitate des Patrick R.", "Thorre & Beyhad", false);
 
         shop.addActivity(guttsSpektakel, trittmannsHorrorShow, slumioksWeihnachtsgedicht, demnitzAbriss, patrickRZitate);
