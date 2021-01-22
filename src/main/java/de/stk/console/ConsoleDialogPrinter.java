@@ -203,14 +203,14 @@ public class ConsoleDialogPrinter {
         String input;
         while (true) {
             input = getUserInput();
-            if (input.equalsIgnoreCase("Uebersicht") || input.equalsIgnoreCase("Kaufen") ||
+            if (input.equalsIgnoreCase("Übersicht") || input.equalsIgnoreCase("Kaufen") ||
                     input.equalsIgnoreCase("Abbruch")) {
                 break;
             }
             System.out.println(colorize("Keine gültige Eingabe.", Color.RED));
         }
 
-        if (input.equalsIgnoreCase("Uebersicht")) {
+        if (input.equalsIgnoreCase("Übersicht")) {
             initWindow(SHOP);
         } else if (input.equalsIgnoreCase("Kaufen")) {
             initWindow(BILL);
@@ -289,7 +289,7 @@ public class ConsoleDialogPrinter {
                 rawInput = getUserInput();
                 intInput = Integer.parseInt(rawInput);
             } catch (NumberFormatException exception) {
-                if (rawInput.equalsIgnoreCase("Uebersicht")) {
+                if (rawInput.equalsIgnoreCase("Übersicht")) {
                     return null;
                 } else {
                     System.out.println(colorize("Ungültige Antwort! Bitte geben Sie eine der Zahlen aus den eckigen Klammern ein.", Color.RED));
@@ -326,12 +326,12 @@ public class ConsoleDialogPrinter {
     enum WindowState {
 
         SHOP(colorize("Willkommen im Ticket Shop der Stadt Köln!\nDies ist unsere Auswahl an Veranstaltungen:", Color.CYAN), "Geben Sie bitte den Titel der Veranstaltung ein für die Sie sich interessieren:"),
-        DETAILED_VIEW("Detailansicht des ausgewählten Objekts:\n", "Geben Sie bitte die Nummer der Veranstaltung ein für die Sie sich interessieren.\n[Uebersicht] bringt Sie zurück in den Shop:"),
+        DETAILED_VIEW("Detailansicht des ausgewählten Objekts:\n", "Geben Sie bitte die Nummer der Veranstaltung ein für die Sie sich interessieren.\n[Übersicht] bringt Sie zurück in den Shop:"),
         BUY_PRICE_CLASS("Eine höhere Preisklasse entspricht für gewöhnlich einem besserem Sitzplatz.\nAlle Preise ohne Mehrwertsteuer!\n\nVerfügbare Preisklassen:", "Geben Sie bitte die gewünschte Preisklasse an. "),
         BUY_AMOUNT("Verfügbare Tickets:", "Geben Sie bitte die gewünschte Menge an Karten an."),
         BUY_DISCOUNT("Verfügbare Rabatte:\n", "Geben Sie bitte den für Rabatt an für den Sie qualifiziert sind."),
-        SHOPPING_CART("Diese Produkte befinden sich in ihrem Warenkorb:\n", "[Kaufen] zum Kaufen aller Inhalte des Warenkorbs.\n[Uebersicht] Wenn Sie noch weitere Gegenstände in den Warenkorb legen wollen.\n[Abbruch] zum leeren des Warenkorbs."),
-        BILL(colorize("Vielen Dank für ihren Einkauf! \nIhre Rechnung:", Color.GREEN), "Wählen Sie [Uebersicht] um sich alle Angebote anzeigen zu lassen.");
+        SHOPPING_CART("Diese Produkte befinden sich in ihrem Warenkorb:\n", "[Kaufen] zum Kaufen aller Inhalte des Warenkorbs.\n[Übersicht] Wenn Sie noch weitere Gegenstände in den Warenkorb legen wollen.\n[Abbruch] zum leeren des Warenkorbs."),
+        BILL(colorize("Vielen Dank für ihren Einkauf! \nIhre Rechnung:", Color.GREEN), "Wählen Sie [Übersicht] um sich alle Angebote anzeigen zu lassen.");
 
         /**
          * A short informative text about the current Windows that is displayed to the user.
