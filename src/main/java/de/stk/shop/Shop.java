@@ -16,7 +16,6 @@ public class Shop {
      * Contains all the instances of {@link Activity}ies subclasses. These are all
      * different activities with their own values.
      */
-    //TODO: Check if this can be a HashMap<UniqueName,Activity>. This would optimize the ConsoleDialogPrinter
     @Getter
     private final ArrayList<Activity> allActivities = new ArrayList<>();
 
@@ -25,16 +24,6 @@ public class Shop {
      */
     @Getter
     private final ShoppingCart shoppingCart = new ShoppingCart();
-
-    /**
-     * Gets the specified activity from the Arraylist.
-     *
-     * @param index The Arraylist's index.
-     * @return Gives the activity of the index.
-     */
-    public Activity getActivity(int index) {
-        return allActivities.get(index);
-    }
 
     /**
      * Adds an specified activity.

@@ -40,7 +40,7 @@ public class ShoppingCart {
 
         printEmptyLine();
         System.out.println(colorize("Gesamter Preis exkl. 19% Mehrwertsteuer: " + totalPrice + ConsoleUtils.EURO, Color.GREEN));
-        System.out.println(colorize("Gesamter Preis inkl. 19% Mehrwertsteuer: " + totalPriceTax + ConsoleUtils.EURO, Color.BLUE));
+        System.out.println(colorize("Gesamter Preis inkl. 19% Mehrwertsteuer: " + totalPriceTax + ConsoleUtils.EURO, Color.LIGHT_BLUE));
     }
 
 

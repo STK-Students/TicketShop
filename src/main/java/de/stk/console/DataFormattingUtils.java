@@ -12,14 +12,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static de.stk.console.ColorUtil.colorize;
 import static de.stk.data.ActivityPricing.PricingType;
 
 public class DataFormattingUtils {
 
     private static final DecimalFormat formatter = new DecimalFormat("0.00");
 
-    //TODO: Formatted Pricing does not include any options.
     public static ArrayList<String> getFormattedPricing(ArrayList<Float> prices) {
         ArrayList<String> resultArray = new ArrayList<>();
 
