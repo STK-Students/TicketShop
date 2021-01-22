@@ -14,6 +14,11 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+
+/**
+ * Main class of the TicketShop application. Creates and fills the Shop with demo activities.
+ * Then creates a {@link ConsoleDialogPrinter} instance that holds all the shopping logic.
+ */
 public class TicketShop {
 
     @Getter
